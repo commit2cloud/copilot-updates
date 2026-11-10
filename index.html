@@ -1,0 +1,944 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A sourced GitHub Copilot release field guide covering Universe 2026 and subsequent public updates through November 10.">
+
+<title>Copilot after Universe 2026 | Customer edition</title>
+<script>
+  (() => {
+    const param = new URLSearchParams(window.location.search).get("scoutTheme");
+    const theme =
+      param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>
+<script>
+  (() => {
+    const requested = new URLSearchParams(window.location.search).get("scoutTheme");
+    if (requested === "light" || requested === "dark") document.documentElement.dataset.theme = requested;
+  })();
+</script>
+<style>
+:root {
+  color-scheme: light;
+  --cp-bg: #f7f4ef;
+  --cp-bg-elevated: #fcfbf8;
+  --cp-surface: #ffffff;
+  --cp-surface-soft: #f5f5f5;
+  --cp-border: #dedede;
+  --cp-border-strong: #919191;
+  --cp-text: #242424;
+  --cp-text-muted: #5c5c5c;
+  --cp-text-soft: #6f6f6f;
+  --cp-accent: #b11f4b;
+  --cp-accent-hover: #9a1a41;
+  --cp-accent-soft: rgba(177, 31, 75, 0.08);
+  --cp-accent-fg: #ffffff;
+  --cp-success: #16a34a;
+  --cp-danger: #dc2626;
+  --cp-warning: #f59e0b;
+  --cp-link: #0078d4;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+  --cp-overlay: rgba(255, 255, 255, 0.8);
+  --cp-panel: rgba(255, 255, 255, 0.86);
+  --cp-panel-strong: rgba(255, 255, 255, 0.96);
+  --cp-sheen: rgba(255, 255, 255, 0.55);
+  --cp-highlight: rgba(177, 31, 75, 0.12);
+}
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --cp-bg: #3d3b3a;
+  --cp-bg-elevated: #343231;
+  --cp-surface: #292929;
+  --cp-surface-soft: #2e2e2e;
+  --cp-border: #474747;
+  --cp-border-strong: #5f5f5f;
+  --cp-text: #dedede;
+  --cp-text-muted: #919191;
+  --cp-text-soft: #b0b0b0;
+  --cp-accent: #fd8ea1;
+  --cp-accent-hover: #fb7b91;
+  --cp-accent-soft: rgba(253, 142, 161, 0.14);
+  --cp-accent-fg: #1a1a1a;
+  --cp-success: #4ade80;
+  --cp-danger: #f87171;
+  --cp-warning: #fbbf24;
+  --cp-link: #4da6ff;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+  --cp-overlay: rgba(41, 41, 41, 0.88);
+  --cp-panel: rgba(41, 41, 41, 0.72);
+  --cp-panel-strong: rgba(41, 41, 41, 0.96);
+  --cp-sheen: rgba(255, 255, 255, 0.04);
+  --cp-highlight: rgba(253, 142, 161, 0.12);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+body { margin: 0; background: var(--cp-bg); color: var(--cp-text); font: 16px/1.6 "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif; }
+a { color: var(--cp-link); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--cp-accent-hover); }
+button, input, select { font: inherit; }
+button, select { cursor: pointer; }
+button { border: 1px solid var(--cp-border-strong); border-radius: .625rem; padding: 8px 12px; background: var(--cp-surface); color: var(--cp-text); }
+button:hover { border-color: var(--cp-accent); }
+:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 4px; }
+[hidden] { display: none !important; }
+.skip { position: absolute; left: 16px; top: -100px; padding: 12px; background: var(--cp-surface); z-index: 20; }
+.skip:focus { top: 12px; }
+.topbar { position: sticky; top: 0; z-index: 5; border-bottom: 1px solid var(--cp-border); background: var(--cp-bg-elevated); }
+.topbar-inner { max-width: 1440px; margin: auto; padding: 16px 32px; display: flex; align-items: center; gap: 16px; }
+.brand { color: var(--cp-text); font-weight: 700; text-decoration: none; letter-spacing: -.3px; }
+.brand-mark { display: inline-grid; place-items: center; width: 30px; height: 30px; margin-right: 8px; background: var(--cp-accent); color: var(--cp-accent-fg); border-radius: .625rem; font-family: Consolas, "Courier New", Courier, monospace; }
+.edition { border-left: 1px solid var(--cp-border); padding-left: 16px; color: var(--cp-text-muted); font-size: .85rem; }
+.top-actions { margin-left: auto; display: flex; gap: 8px; }
+.layout { max-width: 1440px; padding: 0 32px; margin: auto; display: grid; grid-template-columns: 220px minmax(0,1fr); gap: 64px; }
+.rail { align-self: start; position: sticky; top: 104px; padding: 24px 0; }
+.rail-label, .eyebrow { color: var(--cp-accent); font-size: .74rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin: 0 0 16px; }
+.rail-label { color: var(--cp-text-soft); margin: 0 0 24px; }
+.rail nav { display: grid; gap: 4px; }
+.rail nav a { display: flex; gap: 16px; padding: 12px 0; text-decoration: none; font-size: .9rem; color: var(--cp-text); border-bottom: 1px solid var(--cp-border); }
+.rail nav span { font-family: Consolas, "Courier New", Courier, monospace; color: var(--cp-text-soft); font-size: .8rem; }
+.rail-note { margin-top: 32px; font-size: .8rem; color: var(--cp-text-muted); }
+.rail-note strong { color: var(--cp-text); }
+main { min-width: 0; padding-bottom: 48px; }
+.hero { padding: 64px 0 40px; }
+h1 { font-size: clamp(2.6rem, 5vw, 4.5rem); letter-spacing: -.055em; line-height: 1.07; font-weight: 650; margin: 0 0 24px; max-width: 820px; }
+.intro { font-size: 1.15rem; color: var(--cp-text-muted); max-width: 740px; margin: 0 0 28px; }
+.stamp { font-size: .8rem; color: var(--cp-text-soft); }
+.stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 0 0 32px; }
+.stat { padding: 20px; border: 1px solid var(--cp-border); background: var(--cp-bg-elevated); border-radius: 16px; }
+.stat strong { font-size: 2rem; line-height: 1.2; font-weight: 650; display: block; letter-spacing: -.04em; }
+.stat span { display: block; font-size: .86rem; margin-top: 8px; }
+.stat small { display: block; color: var(--cp-text-soft); font-size: .76rem; margin-top: 4px; }
+.stat.accent { background: var(--cp-accent); color: var(--cp-accent-fg); border-color: var(--cp-accent); }
+.stat.accent small { color: var(--cp-accent-fg); }
+.notice, .private-banner { padding: 20px 24px; border-left: 4px solid var(--cp-accent); background: var(--cp-accent-soft); border-radius: 0 .625rem .625rem 0; font-size: .92rem; }
+.notice p { margin: 8px 0 0; }
+.private-banner { margin-top: 24px; border: 2px solid var(--cp-accent); border-radius: .625rem; }
+.private-banner strong { display: block; }
+.section-block { border-top: 1px solid var(--cp-border); padding-top: 40px; margin-top: 40px; }
+h2 { font-size: 1.75rem; letter-spacing: -.03em; line-height: 1.25; margin: 0 0 16px; font-weight: 650; }
+h3 { font-size: 1.25rem; letter-spacing: -.02em; line-height: 1.35; margin: 12px 0; font-weight: 650; }
+h4 { font-size: .9rem; margin: 20px 0 4px; }
+.section-intro { color: var(--cp-text-muted); margin: 0 0 24px; max-width: 760px; }
+.periods { display: flex; flex-wrap: wrap; gap: 8px; padding-bottom: 20px; }
+.periods button { border-color: var(--cp-border); font-size: .86rem; }
+.periods button[aria-pressed="true"] { border-color: var(--cp-accent); background: var(--cp-accent-soft); color: var(--cp-accent); font-weight: 600; }
+.filters { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 12px; padding: 20px; border: 1px solid var(--cp-border); background: var(--cp-bg-elevated); border-radius: 16px; }
+label { display: block; font-size: .78rem; font-weight: 600; }
+input, select { width: 100%; min-width: 0; color: var(--cp-text); background: var(--cp-surface); border: 1px solid var(--cp-border-strong); border-radius: .625rem; padding: 10px 12px; margin-top: 8px; font-size: .86rem; }
+.results-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 20px 0; font-size: .8rem; color: var(--cp-text-muted); }
+.results-bar button { padding: 4px 8px; font-size: .78rem; }
+.release { border: 1px solid var(--cp-border); background: var(--cp-surface); border-radius: 16px; padding: 24px; margin: 0 0 16px; }
+.release:target { outline: 2px solid var(--cp-accent); outline-offset: 3px; }
+.release-top { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; font-size: .72rem; color: var(--cp-text-muted); }
+.release-date { font-family: Consolas, "Courier New", Courier, monospace; color: var(--cp-text); font-weight: 700; }
+.phase { border-left: 1px solid var(--cp-border); padding-left: 12px; }
+.status { margin-left: auto; border: 1px solid var(--cp-border); border-radius: .625rem; padding: 3px 8px; background: var(--cp-surface-soft); color: var(--cp-text-muted); }
+.status.ga { color: var(--cp-success); }
+.status.preview, .status.mixed { color: var(--cp-accent); background: var(--cp-accent-soft); border-color: var(--cp-accent); }
+.summary { color: var(--cp-text-muted); font-size: .94rem; margin: 0 0 16px; }
+summary { cursor: pointer; font-size: .84rem; font-weight: 600; color: var(--cp-link); padding: 4px 0; }
+dl { font-size: .88rem; margin: 20px 0; }
+dt { font-weight: 700; margin-top: 16px; }
+dd { color: var(--cp-text-muted); margin: 4px 0 0; }
+.source-links { display: flex; flex-wrap: wrap; gap: 12px 20px; font-size: .8rem; }
+.release-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin-top: 20px; padding-top: 12px; border-top: 1px solid var(--cp-border); font-size: .7rem; color: var(--cp-text-soft); }
+.release-foot a { color: var(--cp-text-muted); }
+.analysis { padding: 20px; background: var(--cp-bg-elevated); border: 1px solid var(--cp-border); border-radius: .625rem; margin-top: 20px; }
+.analysis p { font-size: .88rem; margin: 4px 0 12px; }
+.analysis .eyebrow { font-size: .7rem; }
+.fine { font-size: .78rem !important; color: var(--cp-text-soft); }
+.guide-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.guide { padding: 20px; border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-bg-elevated); }
+.guide h3 { font-size: 1rem; margin: 0 0 12px; }
+.guide p { font-size: .88rem; color: var(--cp-text-muted); margin: 0; }
+.legend { display: grid; grid-template-columns: 130px 1fr; gap: 12px 24px; font-size: .88rem; }
+.legend dt { margin: 0; }
+.legend dd { margin: 0; }
+.sources-list { font-size: .82rem; padding-left: 20px; overflow-wrap: anywhere; }
+.sources-list li { margin: 12px 0; }
+.edition, .rail-note, .intro, .summary, dd, .section-intro, .results-bar,
+.release-top, .status, .guide p, footer { color: var(--cp-text-soft); }
+.status.ga { color: var(--cp-success); }
+.status.preview, .status.mixed { color: var(--cp-accent); }
+.empty { padding: 32px; border: 1px dashed var(--cp-border-strong); border-radius: 16px; text-align: center; }
+footer { margin-top: 40px; border-top: 1px solid var(--cp-border); padding-top: 24px; font-size: .8rem; color: var(--cp-text-muted); }
+noscript p { padding: 20px; background: var(--cp-accent-soft); }
+@media (max-width: 1050px) {
+  .layout { grid-template-columns: 175px minmax(0,1fr); gap: 32px; }
+  .filters { grid-template-columns: 1fr 1fr; }
+  .filters .search-field { grid-column: 1/-1; }
+}
+@media (max-width: 760px) {
+  .layout { display: block; padding: 0 20px; }
+  .topbar-inner { padding: 12px 20px; gap: 8px; flex-wrap: wrap; }
+  .edition { display: none; }
+  .top-actions button { padding: 6px 8px; font-size: .8rem; }
+  .rail { position: static; padding: 24px 0 0; }
+  .rail-label, .rail-note { display: none; }
+  .rail nav { display: flex; gap: 12px; flex-wrap: wrap; }
+  .rail nav a { padding: 4px 0; font-size: .76rem; gap: 6px; border: 0; }
+  .hero { padding: 36px 0 24px; }
+  .stats { gap: 8px; }
+  .stat { padding: 12px; border-radius: .625rem; }
+  .stat strong { font-size: 1.6rem; }
+  .stat span { font-size: .75rem; }
+  .stat small { font-size: .65rem; }
+  .release { padding: 20px; }
+  .status { margin-left: 0; }
+  .guide-grid { grid-template-columns: 1fr; }
+  .legend { grid-template-columns: 1fr; gap: 4px; }
+  .legend dd { margin-bottom: 12px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+@media print {
+  .topbar, .rail, .filters, .periods, .results-bar button, .release-foot a { display: none; }
+  .layout { display: block; padding: 0; }
+  .hero { padding-top: 0; }
+  .release { break-inside: avoid; }
+  .section-block { margin-top: 24px; padding-top: 24px; }
+  a { overflow-wrap: anywhere; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="#overview"><span class="brand-mark" aria-hidden="true">/</span>Copilot / Field guide</a>
+  <span class="edition">Customer edition</span>
+  <div class="top-actions"><button id="theme" type="button" aria-label="Toggle dark theme" aria-pressed="false">Dark theme</button><button id="print" type="button">Print / PDF</button></div>
+</div></header>
+<div class="layout">
+<aside class="rail">
+  <p class="rail-label">Universe 2026 / Dispatch 01</p>
+  <nav aria-label="Page sections">
+    <a href="#overview"><span>01</span> The briefing</a>
+    <a href="#updates"><span>02</span> Explore updates</a>
+    <a href="#reading"><span>03</span> Reading the labels</a>
+    
+    <a href="#sources"><span>05</span> Sources &amp; scope</a>
+  </nav>
+  <p class="rail-note"><strong>Snapshot, not a live feed.</strong><br>Public announcements through Nov 10, 2026.<br><br>Availability depends on your plan, policies, client and rollout.</p>
+</aside>
+<main id="main">
+
+<section class="hero" id="overview">
+  <p class="eyebrow">Customer edition / November 2026</p>
+  <h1>What changed<br>after Universe.</h1>
+  <p class="intro">A source-backed field guide to GitHub Copilot's latest changes. Separate the conference launches from what shipped next, and see what each update means for your rollout.</p>
+  <p class="stamp">Research cutoff: Nov 10, 2026, 13:37 Central &nbsp; / &nbsp; Public sources only</p>
+</section>
+<div class="stats" aria-label="Coverage at a glance">
+  <div class="stat"><strong>21</strong><span>Conference-era topics</span><small>Oct 28-29 / baseline</small></div>
+  <div class="stat accent"><strong>11</strong><span>Post-event topics</span><small>Oct 30-Nov 10 / follow-on</small></div>
+  <div class="stat"><strong>2</strong><span>Distinct release windows</span><small>No pre-event news relabeled</small></div>
+</div>
+<aside class="notice">
+  <strong>The 60-second read</strong>
+  <p><b>At Universe:</b> Fusion, connected cloud sessions, app projects and richer automation shifted the focus toward coordinated agent work. Their release phases are not uniform.</p>
+  <p><b>Since the event:</b> Air and native Xcode integrations expand where you work; usage reporting and review APIs strengthen visibility and control.</p>
+  <p><b>Review before enabling:</b> Claude Fable 5.2 is GA but has default provider retention and an off-by-default admin policy. The exemption is eligibility-based and time-bound, not a universal ZDR guarantee.</p>
+  <p class="fine">Details and primary citations are attached to every update below.</p>
+</aside>
+<section id="updates" class="section-block">
+  <p class="eyebrow">02 / Release explorer</p>
+  <h2>From announcement to practical use.</h2>
+  <p class="section-intro">Start with the follow-on updates. Switch to the conference baseline to see what was announced at Universe. Expand a topic for eligibility, limitations and primary sources.</p>
+  <noscript><p>JavaScript is disabled. All 32 topics and their source links remain readable below; search and filters require JavaScript.</p></noscript>
+  <div class="periods" role="group" aria-label="Release window">
+    <button type="button" data-window="after" aria-pressed="false">After Universe / Oct 30-Nov 10</button>
+    <button type="button" data-window="during" aria-pressed="false">At Universe / Oct 28-29</button>
+    <button type="button" data-window="all" aria-pressed="true">Both windows</button>
+  </div>
+  <div class="filters">
+    <label class="search-field">Search updates<input id="search" type="search" placeholder="Try: retention, Xcode, budget..." autocomplete="off" aria-describedby="search-help"></label>
+    <label>Topic<select id="category"><option value="">All topics</option><option value="Models &amp; context">Models &amp; context</option><option value="Developer experience">Developer experience</option><option value="Review &amp; delivery">Review &amp; delivery</option><option value="Governance &amp; measurement">Governance &amp; measurement</option></select></label>
+    <label>Release status<select id="status"><option value="">All statuses</option><option value="ga">GA (including rollout)</option><option value="preview">Preview / experimental</option><option value="mixed">Mixed release phases</option><option value="released">Released / other</option></select></label>
+  </div>
+  <p class="fine" id="search-help">Search this edition's update titles, summaries and details, including collapsed text. Date, topic and status filters still apply. Reset searches both date windows.</p>
+  <div class="results-bar"><span id="result-count" role="status" aria-live="polite">32 topics / both windows</span><div><button id="reset" type="button">Reset</button> <button id="expand" type="button">Expand visible</button> <button id="collapse" type="button">Collapse visible</button></div></div>
+  <div id="releases">
+    <article class="release" id="cpp" data-phase="after"
+             data-category="Developer experience" data-status="released">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-11-10">Nov 10</time></span>
+        <span class="phase">After Universe</span>
+        <span class="status released">Released</span>
+      </div>
+      <h3>C++ language server automatically configures MSBuild projects</h3>
+      <p class="summary">The Copilot CLI language-server plugin bundles and automatically runs the MSBuild compilation-database extractor, removing a separate configuration-skill discovery step.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Active GitHub Copilot subscription required; release does not enumerate individual tiers.</dd>
+        <dt>Important limits</dt><dd>Plugin installation and EULA acceptance are required. This automatic path is for MSBuild; CMake and custom builds still need their documented compilation-database setup.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-11-10-c-language-server-now-auto-configures-msbuild-builds">Release <span aria-hidden="true">&#8599;</span></a> <a href="https://github.com/microsoft/cpp-language-server">Plugin quick start <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Developer experience</span>
+        <a href="#cpp" aria-label="Permalink: C++ language server automatically configures MSBuild projects">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="fable" data-phase="after"
+             data-category="Models &amp; context" data-status="ga">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-11-09">Nov 9</time></span>
+        <span class="phase">After Universe</span>
+        <span class="status ga">GA / gradual rollout</span>
+      </div>
+      <h3>Claude Fable 5.2 arrives with explicit data-retention conditions</h3>
+      <p class="summary">A new model option for complex, multistep coding work. Business and Enterprise administrators must explicitly enable its policy, which is off by default.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Copilot Pro+, Max, Business and Enterprise. Not listed for Free or Pro.</dd>
+        <dt>Important limits</dt><dd>Anthropic retains prompts and outputs for safety classifiers by default, not model training. Eligible enterprises may receive a time-bound ZDR exemption through the end of 2026; account-team approval and separate model enablement are required. Availability is gradual.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-11-09-claude-fable-5-2-in-github-copilot">Release and retention conditions <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Models &amp; context</span>
+        <a href="#fable" aria-label="Permalink: Claude Fable 5.2 arrives with explicit data-retention conditions">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="weekly" data-phase="after"
+             data-category="Developer experience" data-status="mixed">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-11-06">Nov 6</time></span>
+        <span class="phase">After Universe</span>
+        <span class="status mixed">Mixed / see details</span>
+      </div>
+      <h3>Weekly client improvements: app, CLI and VS Code 1.145</h3>
+      <p class="summary">The app improves Agent Merge, context-limit recovery and session management. CLI /settings becomes a unified searchable dashboard. VS Code adds local automation cron expressions and workspace custom agents.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Client-specific release; no single tier matrix in the weekly post. Underlying feature eligibility still applies.</dd>
+        <dt>Important limits</dt><dd>VS Code chat view modes are experimental; remote browser and canvas support are preview and require settings. Assisted-approval personal instructions are opt-in and local-only. Cloud attachments in the described VS Code flow support images only.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-11-06-github-copilot-weekly-releases-november-2">Weekly release, published Nov 6 (week of Nov 2) <span aria-hidden="true">&#8599;</span></a> <a href="https://code.visualstudio.com/updates/v1_145">VS Code 1.145 <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Developer experience</span>
+        <a href="#weekly" aria-label="Permalink: Weekly client improvements: app, CLI and VS Code 1.145">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="slack-teams" data-phase="after"
+             data-category="Developer experience" data-status="ga">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-11-06">Nov 6</time></span>
+        <span class="phase">After Universe</span>
+        <span class="status ga">GA</span>
+      </div>
+      <h3>@GitHub in Slack and Teams is generally available</h3>
+      <p class="summary">Investigate bugs, create issues and request code changes from conversations. Teams Canvas brings plans, code changes and previews alongside team discussion; onboarding and follow-up reliability improve.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Connected cloud coding requires a paid Copilot plan and applicable organization policies. The Nov 6 post does not provide a separate tier matrix.</dd>
+        <dt>Important limits</dt><dd>Install or upgrade the GitHub integration and connect your GitHub account. Teams Canvas is not a claim of Canvas parity in Slack. Created issues and pull requests now identify the originating conversation and user.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-11-06-github-copilot-in-slack-and-teams-is-generally-available/">Nov 6 release <span aria-hidden="true">&#8599;</span></a> <a href="https://github.blog/changelog/2026-10-28-work-from-anywhere-with-a-new-connected-copilot-cloud-experience">Cloud prerequisites <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Developer experience</span>
+        <a href="#slack-teams" aria-label="Permalink: @GitHub in Slack and Teams is generally available">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="review-api" data-phase="after"
+             data-category="Review &amp; delivery" data-status="released">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-11-06">Nov 6</time></span>
+        <span class="phase">After Universe</span>
+        <span class="status released">Released</span>
+      </div>
+      <h3>Code-review management APIs and clearer review overviews</h3>
+      <p class="summary">REST and GraphQL can manage code-review settings by administrative role. Reviews expose attribution, effort metadata when available and reported customization sources. The overview is more compact.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Copilot Pro, Pro+, Max, Business and Enterprise; management scope depends on administrator role.</dd>
+        <dt>Important limits</dt><dd>Enterprise and organization settings endpoints do not support GitHub Apps or fine-grained PATs; repository settings endpoints do, with Administration read/write permissions. Automatic-review rules now honor bypass lists. Failed or timed-out reviews retry once.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-11-06-copilot-code-review-api-management-and-review-overview-updates">Release and endpoint limits <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Review &amp; delivery</span>
+        <a href="#review-api" aria-label="Permalink: Code-review management APIs and clearer review overviews">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="impact" data-phase="after"
+             data-category="Governance &amp; measurement" data-status="released">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-11-06">Nov 6</time></span>
+        <span class="phase">After Universe</span>
+        <span class="status released">Released</span>
+      </div>
+      <h3>Impact dashboard includes Chat and the VS Code Agents window</h3>
+      <p class="summary">Feature engagement now covers nine experiences. The dashboard renames Passive users to Chat-first users; 28-day API reports add chat and vscode_agent entries.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Enterprise and organization reporting; authorized owners, billing managers or roles with View Copilot Metrics. Usage metrics policy must be enabled.</dd>
+        <dt>Important limits</dt><dd>Adoption phases and cohort sizes do not change. The API still calls this cohort No Cohort. Engagement requires use on at least two days in 28 days; people can appear in multiple feature counts.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-11-06-copilot-impact-dashboard-adds-chat-and-vs-code-agent-usage">Release and definitions <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Governance &amp; measurement</span>
+        <a href="#impact" aria-label="Permalink: Impact dashboard includes Chat and the VS Code Agents window">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="telemetry" data-phase="after"
+             data-category="Governance &amp; measurement" data-status="released">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-11-05">Nov 5</time></span>
+        <span class="phase">After Universe</span>
+        <span class="status released">Released</span>
+      </div>
+      <h3>Usage API identifies telemetry and client-version gaps</h3>
+      <p class="summary">Per-user client_telemetry_present and usage_metrics_requirements fields explain missing editor detail. Daily aggregate counts identify users with missing telemetry or versions below reporting minimums.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Enterprise and organization reports; authorized reporting roles and enabled usage metrics policy required.</dd>
+        <dt>Important limits</dt><dd>Users can remain active without client detail. Missing values are unknown, not zero. Daily counts overlap and must not be added together or across days as unique users. No values exist for report days before release.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-11-05-usage-metrics-api-flags-telemetry-and-version-gaps">Release and field definitions <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Governance &amp; measurement</span>
+        <a href="#telemetry" aria-label="Permalink: Usage API identifies telemetry and client-version gaps">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="addressed" data-phase="after"
+             data-category="Governance &amp; measurement" data-status="released">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-11-05">Nov 5</time></span>
+        <span class="phase">After Universe</span>
+        <span class="status released">Released</span>
+      </div>
+      <h3>Repository reports measure code-review feedback addressed</h3>
+      <p class="summary">The repos-1-day report adds copilot_code_review counts, including comments evaluated and addressed, plus severity, review-tier, comment-type and customization breakdowns.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Enterprise and organization repository reports; authorized reporting roles and enabled usage metrics policy required.</dd>
+        <dt>Important limits</dt><dd>Addressed rate = total_comments_addressed / total_comments_evaluated; evaluate a zero denominator as unavailable. Evaluation happens on merge day. Addressed can include a reply promising a later fix, not just a code change. Bot-authored PR comments are usually not evaluated.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-11-05-usage-metrics-api-adds-code-review-details-and-addressed-rate">Release and counting rules <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Governance &amp; measurement</span>
+        <a href="#addressed" aria-label="Permalink: Repository reports measure code-review feedback addressed">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="xcode" data-phase="after"
+             data-category="Developer experience" data-status="preview">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-11-04">Nov 4</time></span>
+        <span class="phase">After Universe</span>
+        <span class="status preview">Public preview</span>
+      </div>
+      <h3>Copilot joins Xcode&#x27;s built-in coding assistant</h3>
+      <p class="summary">Use Copilot in Xcode&#x27;s native Intelligence settings, separately from the existing Copilot for Xcode extension.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>All Copilot plans.</dd>
+        <dt>Important limits</dt><dd>Requires Xcode 27.3 beta and macOS Tahoe 26.6 or later. Do not equate this new integration with the existing extension or assume identical enterprise-policy coverage.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-11-04-github-copilot-is-now-available-in-xcodes-coding-assistant">Release and prerequisites <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Developer experience</span>
+        <a href="#xcode" aria-label="Permalink: Copilot joins Xcode&#x27;s built-in coding assistant">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="byok" data-phase="after"
+             data-category="Governance &amp; measurement" data-status="released">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-11-03">Nov 3</time></span>
+        <span class="phase">After Universe</span>
+        <span class="status released">Released</span>
+      </div>
+      <h3>Usage API separates local BYOK and enterprise custom models</h3>
+      <p class="summary">Reports identify developer-configured provider/local-model usage separately from administrator-configured enterprise custom models, across user and aggregate 1-day and 28-day reports.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Enterprise and organization reports; authorized reporting roles and enabled usage metrics policy required.</dd>
+        <dt>Important limits</dt><dd>Local BYOK is client-telemetry-based and can undercount users or tokens. Enterprise custom models are observed server-side. Existing totals already include this usage: do not add the new subsets again. No historical backfill for the custom-model flag.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-11-03-byok-and-enterprise-custom-models-in-the-copilot-usage-api">Release and field definitions <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Governance &amp; measurement</span>
+        <a href="#byok" aria-label="Permalink: Usage API separates local BYOK and enterprise custom models">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="air" data-phase="after"
+             data-category="Developer experience" data-status="released">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-11-03">Nov 3</time></span>
+        <span class="phase">After Universe</span>
+        <span class="status released">Available / no phase stated</span>
+      </div>
+      <h3>Copilot is available in JetBrains Air</h3>
+      <p class="summary">The ACP-based integration supports parallel coding sessions and review, locally in JetBrains IDEs or in the cloud through Air Teams, using your Copilot subscription.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Existing Copilot subscription. Cloud also requires a JetBrains account in an Air Teams-enabled business organization and Air-admin enablement.</dd>
+        <dt>Important limits</dt><dd>Air does not include Copilot usage in its governance analytics or let administrators set Copilot spending limits within Air. Users cannot select personal versus organizational Copilot billing per task; subscription checks may occur only when cloud execution starts.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-11-03-github-copilot-is-now-available-in-jetbrains-air">Release and governance limits <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Developer experience</span>
+        <a href="#air" aria-label="Permalink: Copilot is available in JetBrains Air">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="vscode" data-phase="during"
+             data-category="Developer experience" data-status="mixed">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-10-28">Oct 28</time></span>
+        <span class="phase">Universe announcement</span>
+        <span class="status mixed">Mixed / see details</span>
+      </div>
+      <h3>VS Code expands Agent Host and cloud automation workflows</h3>
+      <p class="summary">Continue cloud sessions across clients, run agents on a remote host and switch between editor and Agents windows. Cloud automations can be managed from the Agents window in VS Code 1.144.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Cloud automations: Copilot Pro, Pro+, Max, Business and Enterprise. Other capabilities have feature-specific requirements.</dd>
+        <dt>Important limits</dt><dd>Enable chat.automations.cloud.enabled for cloud automations. Local/remote Agent Host work still needs its host running. Model comparison and the customization marketplace are preview; VS Code computer use is experimental. Do not treat the whole release as one GA feature.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-10-28-github-copilot-in-vs-code-universe-releases">VS Code Universe release <span aria-hidden="true">&#8599;</span></a> <a href="https://github.blog/changelog/2026-10-28-create-and-manage-copilot-automations-in-visual-studio-code">Cloud automations in VS Code <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Developer experience</span>
+        <a href="#vscode" aria-label="Permalink: VS Code expands Agent Host and cloud automation workflows">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="shared" data-phase="during"
+             data-category="Review &amp; delivery" data-status="released">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-10-28">Oct 28</time></span>
+        <span class="phase">Universe announcement</span>
+        <span class="status released">Rolling out</span>
+      </div>
+      <h3>Shared automations belong to the repository, not one person</h3>
+      <p class="summary">Repository readers can see shared automations and writers can edit them. Actions are attributed to Copilot and AI credits are billed to the repository owner.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Rolling out to Copilot Pro, Pro+, Max, Business and Enterprise. Availability may vary.</dd>
+        <dt>Important limits</dt><dd>Organization-owned repositories require Allow use of Copilot cloud agent billed to the organization. Personal versus Shared type cannot be changed after creation.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-10-28-build-shared-workflows-for-your-team-with-copilot-automations">Release and ownership model <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Review &amp; delivery</span>
+        <a href="#shared" aria-label="Permalink: Shared automations belong to the repository, not one person">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="self-improve" data-phase="during"
+             data-category="Review &amp; delivery" data-status="released">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-10-28">Oct 28</time></span>
+        <span class="phase">Universe announcement</span>
+        <span class="status released">Released</span>
+      </div>
+      <h3>Automations can propose improvements from outcomes</h3>
+      <p class="summary">Feedback such as changed triage labels or accepted review comments can inform proposed refinements to prompts, tools and triggers.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Copilot Pro, Pro+, Max, Business and Enterprise.</dd>
+        <dt>Important limits</dt><dd>Proposed changes require review and acceptance before application; this is not silent self-modification. A self-improvement loop can be implemented as a group of cooperating automations.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-10-28-copilot-automations-now-learn-from-outcomes-and-self-improve">Release and approval loop <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Review &amp; delivery</span>
+        <a href="#self-improve" aria-label="Permalink: Automations can propose improvements from outcomes">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="security-extension" data-phase="during"
+             data-category="Review &amp; delivery" data-status="preview">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-10-28">Oct 28</time></span>
+        <span class="phase">Universe announcement</span>
+        <span class="status preview">Public preview</span>
+      </div>
+      <h3>Copilot app security extension brings alerts into local work</h3>
+      <p class="summary">Browse code-scanning alerts, ask Copilot to explain or fix them, and review current changes with /security-review inside the app.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Any Copilot plan for local review. Existing alerts require enabled code scanning and alert-view permissions; private repositories need GitHub Code Security.</dd>
+        <dt>Important limits</dt><dd>Fixes stay in the local working copy: no automatic commit or push. Supported on github.com and Enterprise Cloud with data residency, not GHES. Business/Enterprise require app-policy enablement; AI actions consume credits while browsing and dismissal do not.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-10-28-security-extension-for-the-github-copilot-app">Release and boundaries <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Review &amp; delivery</span>
+        <a href="#security-extension" aria-label="Permalink: Copilot app security extension brings alerts into local work">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="sdk" data-phase="during"
+             data-category="Developer experience" data-status="released">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-10-28">Oct 28</time></span>
+        <span class="phase">Universe announcement</span>
+        <span class="status released">Transition / no immediate action</span>
+      </div>
+      <h3>GitHub Copilot SDK is becoming Microsoft Copilot SDK</h3>
+      <p class="summary">The SDK is evolving into the programmable interface for the shared Microsoft Copilot harness. Branding, repository location and documentation move in phases.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Developer-platform direction announcement, not a new Copilot plan entitlement.</dd>
+        <dt>Important limits</dt><dd>No immediate changes are required for existing users. Package names and namespaces may retain GitHub Copilot branding during transition; the announcement does not establish a forced migration deadline.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-10-28-github-copilot-sdk-is-becoming-microsoft-copilot-sdk">Transition announcement <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Developer experience</span>
+        <a href="#sdk" aria-label="Permalink: GitHub Copilot SDK is becoming Microsoft Copilot SDK">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="review-max" data-phase="during"
+             data-category="Review &amp; delivery" data-status="mixed">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-10-28">Oct 28</time></span>
+        <span class="phase">Universe announcement</span>
+        <span class="status mixed">Mixed / Max preview, approvals GA</span>
+      </div>
+      <h3>Code review adds Max effort and generally available approvals</h3>
+      <p class="summary">Max uses independent reviewers across model providers and reconciles findings. Separately, Copilot approvals are GA and can count toward required repository approvals when enabled.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Copilot Pro, Pro+, Max, Business and Enterprise.</dd>
+        <dt>Important limits</dt><dd>Max is public preview, takes longer and uses more AI credits. Approvals are off by default; administrators can enable them and repository administrators can scope allowed paths. New commits dismiss an existing Copilot approval.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-10-28-copilot-code-review-merge-with-confidence-with-max-and-approvals">Release and configuration <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Review &amp; delivery</span>
+        <a href="#review-max" aria-label="Permalink: Code review adds Max effort and generally available approvals">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="projects" data-phase="during"
+             data-category="Developer experience" data-status="preview">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-10-28">Oct 28</time></span>
+        <span class="phase">Universe announcement</span>
+        <span class="status preview">Public preview</span>
+      </div>
+      <h3>Copilot app projects coordinate ongoing, multi-repository goals</h3>
+      <p class="summary">Projects keep context, sessions, agents and results together, including work that does not require a repository. The app can coordinate related tasks and recurring automations.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Copilot app access required; the launch post and projects guide do not enumerate a project-specific tier matrix.</dd>
+        <dt>Important limits</dt><dd>Projects are preview, not GA. Use a focused repository session for a single task. Do not assume unlimited parallelism, included usage or automatic permission to access every repository.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-10-28-github-copilot-app-universe-releases">App launch <span aria-hidden="true">&#8599;</span></a> <a href="https://docs.github.com/en/copilot/how-tos/github-copilot-app/working-with-projects">Projects guide <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Developer experience</span>
+        <a href="#projects" aria-label="Permalink: Copilot app projects coordinate ongoing, multi-repository goals">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="plugins" data-phase="during"
+             data-category="Governance &amp; measurement" data-status="ga">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-10-28">Oct 28</time></span>
+        <span class="phase">Universe announcement</span>
+        <span class="status ga">GA</span>
+      </div>
+      <h3>Repository plugin defaults and enterprise plugin controls</h3>
+      <p class="summary">Trusted repositories can recommend and enable default plugins. Enterprises can require or block plugins and restrict installation to approved marketplaces across VS Code, CLI and the Copilot app.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Repository defaults: individual Copilot users and Business/Enterprise. Managed controls: GitHub Enterprise Cloud with enterprise- or organization-issued Copilot Business/Enterprise licenses.</dd>
+        <dt>Important limits</dt><dd>Repository defaults are not enforcement: users may disable them where policy permits. Enterprise managed settings take precedence and required plugins cannot be disabled by users. Do not assume identical controls on every IDE.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-10-28-repository-plugin-defaults-and-enterprise-plugin-controls-generally-available">Release and eligibility <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Governance &amp; measurement</span>
+        <a href="#plugins" aria-label="Permalink: Repository plugin defaults and enterprise plugin controls">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="merge" data-phase="during"
+             data-category="Review &amp; delivery" data-status="released">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-10-28">Oct 28</time></span>
+        <span class="phase">Universe announcement</span>
+        <span class="status released">Released</span>
+      </div>
+      <h3>Agent Merge watches and fixes pull requests in the cloud</h3>
+      <p class="summary">The GitHub pull-request merge box gains Watch and fix for failing Actions workflows and merge conflicts, extending a capability already in the app and VS Code.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Paid Copilot plans, subject to organization and enterprise policies.</dd>
+        <dt>Important limits</dt><dd>Watching and fixing does not itself mean automatic merging. Combine it with GitHub auto-merge only when intended, and normal merge requirements still apply.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-10-28-agent-merge-watches-and-fixes-pull-requests-in-the-cloud">Release <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Review &amp; delivery</span>
+        <a href="#merge" aria-label="Permalink: Agent Merge watches and fixes pull requests in the cloud">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="memory" data-phase="during"
+             data-category="Models &amp; context" data-status="ga">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-10-28">Oct 28</time></span>
+        <span class="phase">Universe announcement</span>
+        <span class="status ga">GA / Memory</span>
+      </div>
+      <h3>Copilot Memory carries preferences and repository conventions</h3>
+      <p class="summary">Memory is now GA on paid plans, helping reuse guidance across sessions. GitHub intelligence also brings code search and semantic context beyond a local checkout.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Memory: paid Copilot plans. Availability and controls vary by capability and surface.</dd>
+        <dt>Important limits</dt><dd>Do not assume every client uses every memory type. VS Code policy support is for Local Agent Host sessions with the app setting enabled; app support depends on account availability. Code review supports repository facts rather than personal preferences.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-10-28-github-intelligence-puts-your-code-context-and-history-to-work">Intelligence release <span aria-hidden="true">&#8599;</span></a> <a href="https://docs.github.com/en/copilot/concepts/prompting-and-context/copilot-memory">Memory guide <span aria-hidden="true">&#8599;</span></a> <a href="https://docs.github.com/en/copilot/reference/supported-surfaces-for-policies">Policy coverage <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Models &amp; context</span>
+        <a href="#memory" aria-label="Permalink: Copilot Memory carries preferences and repository conventions">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="local-models" data-phase="during"
+             data-category="Models &amp; context" data-status="preview">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-10-28">Oct 28</time></span>
+        <span class="phase">Universe announcement</span>
+        <span class="status preview">Experimental preview</span>
+      </div>
+      <h3>Fusion can route to eligible local models</h3>
+      <p class="summary">Opt-in local routing can select supported on-device models or cloud models. Managed MAI Code 1.1 Flash setup uses Windows ML; CLI also supports manually configured eligible models on macOS and Linux.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Release names CLI, app and VS Code, but does not state a separate tier matrix. Requires compatible hardware and supported models.</dd>
+        <dt>Important limits</dt><dd>The launch calls this experimental preview; current Fusion Docs call it public preview and still require experimental opt-in. It is not offline: routing decisions occur in the cloud. App routing supports managed Windows ML models only; arbitrary BYOK discovery does not imply Fusion eligibility. Local models may have different safety protections.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-10-28-github-copilot-fusion-now-supports-selection-of-local-models">Release and client distinctions <span aria-hidden="true">&#8599;</span></a> <a href="https://docs.github.com/en/copilot/concepts/models/copilot-fusion">Current preview wording and prerequisites <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Models &amp; context</span>
+        <a href="#local-models" aria-label="Permalink: Fusion can route to eligible local models">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="jetbrains" data-phase="during"
+             data-category="Developer experience" data-status="mixed">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-10-28">Oct 28</time></span>
+        <span class="phase">Universe announcement</span>
+        <span class="status mixed">Mixed / sandbox and NES GA</span>
+      </div>
+      <h3>JetBrains adds GA local sandboxing and next edit suggestions</h3>
+      <p class="summary">The Universe plugin release makes local sandboxes and next edit suggestions GA, adds Fusion and improves session sidebars, permissions defaults and editing reliability.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Copilot users on supported JetBrains IDEs; Fusion rolls out to all users. Post does not separately enumerate tiers for each plugin feature.</dd>
+        <dt>Important limits</dt><dd>Use the latest official plugin. Fusion rollout is gradual. Local sandboxing limits local tool execution according to configured policy; it is not the same environment as JetBrains Air&#x27;s cloud tasks.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-10-28-github-copilot-in-jetbrains-universe-releases">JetBrains Universe release <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Developer experience</span>
+        <a href="#jetbrains" aria-label="Permalink: JetBrains adds GA local sandboxing and next edit suggestions">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="images" data-phase="during"
+             data-category="Developer experience" data-status="preview">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-10-28">Oct 28</time></span>
+        <span class="phase">Universe announcement</span>
+        <span class="status preview">Public preview</span>
+      </div>
+      <h3>Generate and edit images inside Copilot</h3>
+      <p class="summary">A dedicated image tool generates or edits images from natural language and saves results into the workspace in VS Code, the Copilot app and CLI.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Launch explicitly lists Copilot Pro, Pro+, Business and Enterprise. Other tiers are not established by this post.</dd>
+        <dt>Important limits</dt><dd>Image generation is billed separately from the reasoning model using image tokens against AI credits. Administrators can disable the image model. Visible Made with AI watermarking is opt-in and off by default.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-10-28-generate-and-edit-images-directly-in-copilot">Release and billing <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Developer experience</span>
+        <a href="#images" aria-label="Permalink: Generate and edit images inside Copilot">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="ghaw" data-phase="during"
+             data-category="Review &amp; delivery" data-status="ga">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-10-28">Oct 28</time></span>
+        <span class="phase">Universe announcement</span>
+        <span class="status ga">GA / adjacent platform</span>
+      </div>
+      <h3>GitHub Agentic Workflows reaches GA</h3>
+      <p class="summary">The GitHub Next open-source project compiles Markdown-defined agent tasks into Actions workflows with read-only defaults, safe outputs and layered safeguards.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>github.com Free, Team and Enterprise. The default Copilot CLI engine requires a Copilot license; alternative coding agents are supported.</dd>
+        <dt>Important limits</dt><dd>Related platform update, not the same product as Copilot Automations. Actions runners, permissions and costs still matter; safeguards do not remove the need to review allowed outputs and network access.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-10-28-github-agentic-workflows-generally-available">GA announcement <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Review &amp; delivery</span>
+        <a href="#ghaw" aria-label="Permalink: GitHub Agentic Workflows reaches GA">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="fusion" data-phase="during"
+             data-category="Models &amp; context" data-status="ga">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-10-28">Oct 28</time></span>
+        <span class="phase">Universe announcement</span>
+        <span class="status ga">GA</span>
+      </div>
+      <h3>Copilot Fusion routes and orchestrates models</h3>
+      <p class="summary">Choose Standard, High or Max effort instead of managing a model for every step. Fusion selects models and execution patterns based on the task.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>VS Code, Copilot app, CLI and JetBrains. Current Docs list Standard across all plans; High and Max require Pro+, Max, Business or Enterprise (not Free, Student or Pro).</dd>
+        <dt>Important limits</dt><dd>Fusion uses eligible enabled models and bills for each model used. Current Docs specify a 30% paid-plan model-cost discount through Nov 30, 2026, not permanent pricing. Administrator policies can further restrict effort availability. Discarding a draft does not automatically undo its workspace edits.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-10-28-route-and-orchestrate-models-with-github-copilot-fusion">Launch <span aria-hidden="true">&#8599;</span></a> <a href="https://docs.github.com/en/copilot/concepts/models/copilot-fusion">Runtime behavior <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Models &amp; context</span>
+        <a href="#fusion" aria-label="Permalink: Copilot Fusion routes and orchestrates models">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="dreaming" data-phase="during"
+             data-category="Models &amp; context" data-status="preview">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-10-28">Oct 28</time></span>
+        <span class="phase">Universe announcement</span>
+        <span class="status preview">Public preview / opt-in</span>
+      </div>
+      <h3>Copilot dreaming curates context and proposes customizations</h3>
+      <p class="summary">Dreaming can curate personal and repository memories, propose improvements to checked-in skills and instructions, and turn recurring code-review feedback into guidance.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Eligible paid plans, excluding Copilot Pro in the initial preview. GPT-6.1 Sol must be allowed. Enterprise Cloud with data residency is not supported.</dd>
+        <dt>Important limits</dt><dd>Opt-in and credit-consuming, even when a run makes no changes. Repository and personal curation require session syncing; code-review customization does not, but needs review preview features and does not support self-hosted runners. Memories and internal review guidance can change automatically; checked-in skills/instructions require a PR. Repository scope follows Memory access.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-10-28-github-intelligence-puts-your-code-context-and-history-to-work">Release and controls <span aria-hidden="true">&#8599;</span></a> <a href="https://docs.github.com/en/copilot/concepts/prompting-and-context/copilot-dreaming">Dreaming prerequisites <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Models &amp; context</span>
+        <a href="#dreaming" aria-label="Permalink: Copilot dreaming curates context and proposes customizations">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="connectors" data-phase="during"
+             data-category="Governance &amp; measurement" data-status="preview">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-10-28">Oct 28</time></span>
+        <span class="phase">Universe announcement</span>
+        <span class="status preview">Public preview / rollout</span>
+      </div>
+      <h3>GitHub-verified MCP connectors connect once across clients</h3>
+      <p class="summary">Connect supported external services once and reuse them across Copilot app, CLI, VS Code, cloud and mobile. The launch lists 26 services.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>All Copilot plans. Business and Enterprise require Editor preview features; MCP policy and managed allowlists also apply.</dd>
+        <dt>Important limits</dt><dd>A service may require its own administrator approval. On enforcing clients, Registry only blocks connectors; allowlists need connector URLs and matching deny rules still block access. Verified does not mean unrestricted or approved for every organization&#x27;s data.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-10-28-connect-your-tools-to-copilot-without-all-the-setup">Release <span aria-hidden="true">&#8599;</span></a> <a href="https://docs.github.com/en/copilot/concepts/enterprise/mcp-management">MCP policy interactions <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Governance &amp; measurement</span>
+        <a href="#connectors" aria-label="Permalink: GitHub-verified MCP connectors connect once across clients">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="computer-use" data-phase="during"
+             data-category="Developer experience" data-status="preview">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-10-28">Oct 28</time></span>
+        <span class="phase">Universe announcement</span>
+        <span class="status preview">Public preview / app</span>
+      </div>
+      <h3>Copilot app can interact with desktop applications</h3>
+      <p class="summary">Computer use on macOS and Windows can read app content, click controls and edit text, including in applications without an API or MCP integration.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Copilot app; launch post does not enumerate a feature-specific tier matrix.</dd>
+        <dt>Important limits</dt><dd>Opt-in setup and application approval are required; macOS also needs Accessibility and Screen Recording permissions. Organizations can disable it through managed settings. VS Code&#x27;s separately announced computer use is experimental, not the same release phase.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-10-28-github-copilot-app-universe-releases">App release <span aria-hidden="true">&#8599;</span></a> <a href="https://github.blog/changelog/2026-10-28-github-copilot-in-vs-code-universe-releases">VS Code distinctions <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Developer experience</span>
+        <a href="#computer-use" aria-label="Permalink: Copilot app can interact with desktop applications">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="cloud" data-phase="during"
+             data-category="Review &amp; delivery" data-status="ga">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-10-28">Oct 28</time></span>
+        <span class="phase">Universe announcement</span>
+        <span class="status ga">GA / rollout</span>
+      </div>
+      <h3>Connected cloud sessions continue across Copilot clients</h3>
+      <p class="summary">Start and resume the same cloud session across web, mobile, app, CLI and VS Code; Slack and Teams are entry points too. Cloud sandboxes are resumable and run independently of your laptop.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Paid Copilot plans; rollout began Oct 28. Free retains existing web/mobile Chat rather than the new paid cloud experience.</dd>
+        <dt>Important limits</dt><dd>Copilot in the cloud policy governs access. Cloud sandbox compute billing begins in November and draws from the shared Actions compute entitlement; AI usage is a separate consideration. Actions-based setup steps and self-hosted runners still require an Actions environment. Policy coverage varies by environment.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-10-28-work-from-anywhere-with-a-new-connected-copilot-cloud-experience">Launch and compute details <span aria-hidden="true">&#8599;</span></a> <a href="https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/administer-copilot/manage-for-enterprise/manage-agents/manage-copilot-in-the-cloud">Admin guide <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Review &amp; delivery</span>
+        <a href="#cloud" aria-label="Permalink: Connected cloud sessions continue across Copilot clients">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="automations" data-phase="during"
+             data-category="Review &amp; delivery" data-status="released">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-10-28">Oct 28</time></span>
+        <span class="phase">Universe announcement</span>
+        <span class="status released">Released</span>
+      </div>
+      <h3>Automations gain triggers, MCP tools and credit limits</h3>
+      <p class="summary">New capabilities include an API trigger, 24 additional GitHub events, chaining, 20 new GitHub tools and selected custom MCP tools. Set optional limits per run, day, week or month.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Copilot Pro, Pro+, Max, Business and Enterprise; write access to the repository is required to create automations.</dd>
+        <dt>Important limits</dt><dd>Per-run limits stop a run; period limits prevent new runs until reset. Automations without limits continue unchanged. Triggers default to Only users; chaining requires deliberate configuration. Merging and other write tools are explicit capability choices.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-10-28-new-tools-triggers-and-cost-controls-for-copilot-automations">Release and limit semantics <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Review &amp; delivery</span>
+        <a href="#automations" aria-label="Permalink: Automations gain triggers, MCP tools and credit limits">Link to update &#8599;</a></div>
+    </article>
+    <article class="release" id="access" data-phase="during"
+             data-category="Governance &amp; measurement" data-status="released">
+      <div class="release-top">
+        <span class="release-date"><time datetime="2026-10-28">Oct 28</time></span>
+        <span class="phase">Universe announcement</span>
+        <span class="status released">Available / sales-assisted</span>
+      </div>
+      <h3>GitHub Enterprise can include Copilot access</h3>
+      <p class="summary">Eligible sales-assisted Enterprise Cloud customers can move to a model where licensed GitHub Enterprise users have Copilot access and AI usage is metered against an enterprise budget.</p>
+      <details>
+        <summary>Eligibility, limitations &amp; sources</summary>
+        <dl><dt>Plans &amp; prerequisites</dt><dd>Available through GitHub or Microsoft account teams for GitHub Enterprise Cloud. Self-serve is not yet available in the release. Existing Business and Enterprise plans remain available.</dd>
+        <dt>Important limits</dt><dd>Included access is not included AI usage: no monthly AI-credit allowance per seat in this model. Chat, review and cloud need budget; completion and next edit suggestions continue without it. Users without an Enterprise license use the separate Copilot Standalone offering.</dd></dl>
+        <p class="source-links"><a href="https://github.blog/changelog/2026-10-28-github-enterprise-now-includes-access-to-github-copilot">Release and eligibility <span aria-hidden="true">&#8599;</span></a> <a href="https://docs.github.com/copilot/get-started/whats-changing-with-github-enterprise-and-copilot">Current access guide <span aria-hidden="true">&#8599;</span></a></p>
+      </details>
+      <div class="release-foot"><span>Governance &amp; measurement</span>
+        <a href="#access" aria-label="Permalink: GitHub Enterprise can include Copilot access">Link to update &#8599;</a></div>
+    </article></div>
+  <p class="empty" id="empty" hidden>No matching updates. Try another term or <button id="empty-reset" type="button">reset filters</button>.</p>
+</section>
+<section id="reading" class="section-block">
+  <p class="eyebrow">03 / A few important distinctions</p>
+  <h2>Availability is more than a badge.</h2>
+  <dl class="legend">
+    <dt>GA</dt><dd>The cited release explicitly says generally available. It can still roll out gradually or require enablement.</dd>
+    <dt>Public preview</dt><dd>Available for evaluation subject to the stated plan, platform and policy prerequisites. Not a GA commitment.</dd>
+    <dt>Experimental</dt><dd>An opt-in experiment with narrower support. Do not equate Fusion's local-routing preview with Fusion GA.</dd>
+    <dt>Released / other</dt><dd>The source announces availability, rollout or a transition without establishing a uniform GA/preview phase. The guide does not invent one.</dd>
+    <dt>Mixed</dt><dd>A rollup contains capabilities with different release phases. Read the limitations rather than applying one label to everything.</dd>
+    <dt>Eligibility</dt><dd>Plans describe the cited feature, not every surface of the wider product. Unspecified plan details and governance parity are marked as gaps, not inferred.</dd>
+  </dl>
+  <p class="fine">Policy is surface-specific: <a href="https://docs.github.com/en/copilot/reference/supported-surfaces-for-policies">Supported policy surfaces <span aria-hidden="true">&#8599;</span></a>. For enforceable configuration, consult <a href="https://docs.github.com/en/copilot/reference/enterprise-administrators/enterprise-managed-settings">Enterprise managed settings <span aria-hidden="true">&#8599;</span></a>. Metrics detail: <a href="https://docs.github.com/rest/copilot/copilot-usage-metrics">Usage metrics API <span aria-hidden="true">&#8599;</span></a>.</p>
+</section>
+
+<section id="sources" class="section-block">
+  <p class="eyebrow">05 / Evidence &amp; coverage</p>
+  <h2>A dated guide, with a clear boundary.</h2>
+  <div class="guide-grid">
+    <div class="guide"><h3>The window</h3><p>Universe 2026 ran Oct 28-29 in San Francisco, per the <a href="https://githubuniverse.com/">Official Universe event page <span aria-hidden="true">&#8599;</span></a>. The baseline uses Oct 28-29 publication dates; strictly after the event means Oct 30-Nov 10. Nov 10 is incomplete at the research cutoff. Publication dates use the source's calendar date; API timestamps did not supply a timezone.</p></div>
+    <div class="guide"><h3>The evidence</h3><p>Reviewed the 56-entry GitHub changelog window, Copilot-related full posts, <a href="https://github.blog/news-insights/company-news/github-universe-2026-evolving-every-layer-of-the-stack/">GitHub&#x27;s Universe recap <span aria-hidden="true">&#8599;</span></a> and current product documentation. The 32 topic cards group related posts, split distinct release phases and include one labeled adjacent platform update. Card count is not a count of unique releases.</p></div>
+    <div class="guide"><h3>What is not claimed</h3><p>No private roadmap, exhaustive client patch history, tenant-level rollout validation, contractual pricing or GHES parity. Current docs clarify present behavior; they do not prove that every clarification first shipped during this window. No directly relevant post was identified on Oct 30-Nov 2, Oct 29 or Nov 7-8 in the reviewed changelog, not proof of no product changes.</p></div>
+    <div class="guide"><h3>How to use it</h3><p>Check plan, client version, policy and the linked source before rollout. The third-party <a href="https://beardofedu.github.io/copilot-governance-training/">Copilot governance training <span aria-hidden="true">&#8599;</span></a> inspired the numbered navigation, control-layer mindset and explicit known gaps. Product claims here are grounded in primary GitHub sources, not copied training prose.</p></div>
+  </div>
+  <p class="fine">Pre-Universe announcements (for example Oct 26 model/permission releases and Oct 27 server-to-server authentication) are deliberately outside this guide. Unrelated GitHub platform and security releases are not presented as new Copilot features.</p>
+  <details><summary>Open the primary source register</summary><ol class="sources-list"><li><a href="https://github.blog/changelog/2026-11-10-c-language-server-now-auto-configures-msbuild-builds">2026-11-10 / C++ language server automatically configures MSBuild projects / Release <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.com/microsoft/cpp-language-server">2026-11-10 / C++ language server automatically configures MSBuild projects / Plugin quick start <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-11-09-claude-fable-5-2-in-github-copilot">2026-11-09 / Claude Fable 5.2 arrives with explicit data-retention conditions / Release and retention conditions <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-11-06-github-copilot-weekly-releases-november-2">2026-11-06 / Weekly client improvements: app, CLI and VS Code 1.145 / Weekly release, published Nov 6 (week of Nov 2) <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://code.visualstudio.com/updates/v1_145">2026-11-06 / Weekly client improvements: app, CLI and VS Code 1.145 / VS Code 1.145 <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-11-06-github-copilot-in-slack-and-teams-is-generally-available/">2026-11-06 / @GitHub in Slack and Teams is generally available / Nov 6 release <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-10-28-work-from-anywhere-with-a-new-connected-copilot-cloud-experience">2026-11-06 / @GitHub in Slack and Teams is generally available / Cloud prerequisites <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-11-06-copilot-code-review-api-management-and-review-overview-updates">2026-11-06 / Code-review management APIs and clearer review overviews / Release and endpoint limits <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-11-06-copilot-impact-dashboard-adds-chat-and-vs-code-agent-usage">2026-11-06 / Impact dashboard includes Chat and the VS Code Agents window / Release and definitions <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-11-05-usage-metrics-api-flags-telemetry-and-version-gaps">2026-11-05 / Usage API identifies telemetry and client-version gaps / Release and field definitions <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-11-05-usage-metrics-api-adds-code-review-details-and-addressed-rate">2026-11-05 / Repository reports measure code-review feedback addressed / Release and counting rules <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-11-04-github-copilot-is-now-available-in-xcodes-coding-assistant">2026-11-04 / Copilot joins Xcode&#x27;s built-in coding assistant / Release and prerequisites <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-11-03-byok-and-enterprise-custom-models-in-the-copilot-usage-api">2026-11-03 / Usage API separates local BYOK and enterprise custom models / Release and field definitions <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-11-03-github-copilot-is-now-available-in-jetbrains-air">2026-11-03 / Copilot is available in JetBrains Air / Release and governance limits <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-10-28-github-copilot-in-vs-code-universe-releases">2026-10-28 / VS Code expands Agent Host and cloud automation workflows / VS Code Universe release <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-10-28-create-and-manage-copilot-automations-in-visual-studio-code">2026-10-28 / VS Code expands Agent Host and cloud automation workflows / Cloud automations in VS Code <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-10-28-build-shared-workflows-for-your-team-with-copilot-automations">2026-10-28 / Shared automations belong to the repository, not one person / Release and ownership model <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-10-28-copilot-automations-now-learn-from-outcomes-and-self-improve">2026-10-28 / Automations can propose improvements from outcomes / Release and approval loop <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-10-28-security-extension-for-the-github-copilot-app">2026-10-28 / Copilot app security extension brings alerts into local work / Release and boundaries <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-10-28-github-copilot-sdk-is-becoming-microsoft-copilot-sdk">2026-10-28 / GitHub Copilot SDK is becoming Microsoft Copilot SDK / Transition announcement <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-10-28-copilot-code-review-merge-with-confidence-with-max-and-approvals">2026-10-28 / Code review adds Max effort and generally available approvals / Release and configuration <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-10-28-github-copilot-app-universe-releases">2026-10-28 / Copilot app projects coordinate ongoing, multi-repository goals / App launch <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://docs.github.com/en/copilot/how-tos/github-copilot-app/working-with-projects">2026-10-28 / Copilot app projects coordinate ongoing, multi-repository goals / Projects guide <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-10-28-repository-plugin-defaults-and-enterprise-plugin-controls-generally-available">2026-10-28 / Repository plugin defaults and enterprise plugin controls / Release and eligibility <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-10-28-agent-merge-watches-and-fixes-pull-requests-in-the-cloud">2026-10-28 / Agent Merge watches and fixes pull requests in the cloud / Release <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-10-28-github-intelligence-puts-your-code-context-and-history-to-work">2026-10-28 / Copilot Memory carries preferences and repository conventions / Intelligence release <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://docs.github.com/en/copilot/concepts/prompting-and-context/copilot-memory">2026-10-28 / Copilot Memory carries preferences and repository conventions / Memory guide <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://docs.github.com/en/copilot/reference/supported-surfaces-for-policies">2026-10-28 / Copilot Memory carries preferences and repository conventions / Policy coverage <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-10-28-github-copilot-fusion-now-supports-selection-of-local-models">2026-10-28 / Fusion can route to eligible local models / Release and client distinctions <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://docs.github.com/en/copilot/concepts/models/copilot-fusion">2026-10-28 / Fusion can route to eligible local models / Current preview wording and prerequisites <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-10-28-github-copilot-in-jetbrains-universe-releases">2026-10-28 / JetBrains adds GA local sandboxing and next edit suggestions / JetBrains Universe release <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-10-28-generate-and-edit-images-directly-in-copilot">2026-10-28 / Generate and edit images inside Copilot / Release and billing <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-10-28-github-agentic-workflows-generally-available">2026-10-28 / GitHub Agentic Workflows reaches GA / GA announcement <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-10-28-route-and-orchestrate-models-with-github-copilot-fusion">2026-10-28 / Copilot Fusion routes and orchestrates models / Launch <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://docs.github.com/en/copilot/concepts/prompting-and-context/copilot-dreaming">2026-10-28 / Copilot dreaming curates context and proposes customizations / Dreaming prerequisites <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-10-28-connect-your-tools-to-copilot-without-all-the-setup">2026-10-28 / GitHub-verified MCP connectors connect once across clients / Release <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://docs.github.com/en/copilot/concepts/enterprise/mcp-management">2026-10-28 / GitHub-verified MCP connectors connect once across clients / MCP policy interactions <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://docs.github.com/en/enterprise-cloud@latest/copilot/how-tos/administer-copilot/manage-for-enterprise/manage-agents/manage-copilot-in-the-cloud">2026-10-28 / Connected cloud sessions continue across Copilot clients / Admin guide <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-10-28-new-tools-triggers-and-cost-controls-for-copilot-automations">2026-10-28 / Automations gain triggers, MCP tools and credit limits / Release and limit semantics <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://github.blog/changelog/2026-10-28-github-enterprise-now-includes-access-to-github-copilot">2026-10-28 / GitHub Enterprise can include Copilot access / Release and eligibility <span aria-hidden="true">&#8599;</span></a></li><li><a href="https://docs.github.com/copilot/get-started/whats-changing-with-github-enterprise-and-copilot">2026-10-28 / GitHub Enterprise can include Copilot access / Current access guide <span aria-hidden="true">&#8599;</span></a></li></ol></details>
+  <p class="fine"><strong>Confidence: High</strong> for event dates and the explicitly cited release facts, corroborated by the official event page, GitHub Blog changelog and current Docs. Plan details not stated by a source, exact rollout to an account and noted policy gaps remain unverified.</p>
+</section>
+<footer><strong>Customer edition.</strong> This is a self-contained customer edition: no sign-in, tracking, remote scripts or private companion content. Share this HTML file alone, or host only its public folder after approval.<br>Independently prepared reference, not an official release commitment. Research cutoff: Nov 10, 2026, 13:37 Central.</footer>
+</main></div>
+<script>
+(() => {
+  const cards = [...document.querySelectorAll(".release")];
+  const search = document.querySelector("#search");
+  const category = document.querySelector("#category");
+  const status = document.querySelector("#status");
+  const count = document.querySelector("#result-count");
+  const empty = document.querySelector("#empty");
+  const windows = [...document.querySelectorAll("[data-window]")];
+  const theme = document.querySelector("#theme");
+  let period = "after";
+
+  function filter() {
+    const query = search.value.trim().toLocaleLowerCase();
+    let visible = 0;
+    for (const card of cards) {
+      const matches = (period === "all" || card.dataset.phase === period)
+        && (!category.value || card.dataset.category === category.value)
+        && (!status.value || card.dataset.status === status.value)
+        && (!query || card.textContent.toLocaleLowerCase().includes(query));
+      card.hidden = !matches;
+      if (matches) visible++;
+    }
+    for (const button of windows) button.setAttribute("aria-pressed", String(button.dataset.window === period));
+    const label = period === "after" ? "after Universe" : period === "during" ? "at Universe" : "both windows";
+    count.textContent = visible + " of " + cards.length + " topics / " + label;
+    empty.hidden = visible !== 0;
+  }
+  function reset() {
+    period = "all";
+    search.value = "";
+    category.value = "";
+    status.value = "";
+    filter();
+  }
+  function openHash() {
+    const fragment = location.hash.slice(1);
+    const card = cards.find(item => item.id === fragment);
+    if (!card) return;
+    reset();
+    card.querySelector("details").open = true;
+    card.scrollIntoView({block: "start"});
+  }
+  function syncTheme() {
+    const dark = document.documentElement.dataset.theme === "dark";
+    theme.setAttribute("aria-pressed", String(dark));
+    theme.textContent = dark ? "Light theme" : "Dark theme";
+  }
+  for (const button of windows) button.addEventListener("click", () => { period = button.dataset.window; filter(); });
+  search.addEventListener("input", filter);
+  category.addEventListener("change", filter);
+  status.addEventListener("change", filter);
+  document.querySelector("#reset").addEventListener("click", reset);
+  document.querySelector("#empty-reset").addEventListener("click", reset);
+  document.querySelector("#expand").addEventListener("click", () => cards.filter(card => !card.hidden).forEach(card => { card.querySelector("details").open = true; }));
+  document.querySelector("#collapse").addEventListener("click", () => cards.filter(card => !card.hidden).forEach(card => { card.querySelector("details").open = false; }));
+  theme.addEventListener("click", () => {
+    document.documentElement.dataset.theme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    syncTheme();
+  });
+  let printState = [];
+  window.addEventListener("beforeprint", () => {
+    printState = [...document.querySelectorAll("details")].map(detail => [detail, detail.open]);
+    printState.forEach(([detail]) => { if (!detail.closest("[hidden]")) detail.open = true; });
+  });
+  window.addEventListener("afterprint", () => printState.forEach(([detail, open]) => { detail.open = open; }));
+  document.querySelector("#print").addEventListener("click", () => window.print());
+  window.addEventListener("hashchange", openHash);
+  filter();
+  syncTheme();
+  openHash();
+})();
+</script>
+</body>
+</html>
